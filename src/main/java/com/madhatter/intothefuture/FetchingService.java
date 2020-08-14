@@ -39,6 +39,7 @@ public class FetchingService {
     private List<ApiResponse> fetchAllUsingFuture(List<String> ids, int threadCount) throws ExecutionException, InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
         List<List<String>> chunks = Utils.splitToChunks(ids, threadCount);
+        System.out.println(chunks);
         List<Callable<List<ApiResponse>>> tasks = new ArrayList<>();
         chunks.forEach(chunk -> tasks.add(wrapFetchInCallable(chunk)));
         List<Future<List<ApiResponse>>> resultFuture = executorService.invokeAll(tasks);

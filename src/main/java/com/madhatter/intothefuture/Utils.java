@@ -13,14 +13,14 @@ public class Utils {
         if (content.size() < chunkCount) {
             throw new RuntimeException("Cannot split into " + chunkCount + " chunks");
         }
-        int chunkSize = content.size() / chunkCount;
-        List<List<T>> chunkList = ListUtils.partition(content, chunkSize);
-        if(chunkList.size() > chunkCount) {
-            chunkList = new ArrayList<>(chunkList);
-            List<T> penultimateItem = chunkList.remove(chunkCount);
-            List<T> ultimateItem = chunkList.remove(chunkCount - 1);
-            List<T> joinedItems = Stream.concat(penultimateItem.stream(), ultimateItem.stream()).collect(Collectors.toList());
-            chunkList.add(joinedItems);
+        List<List<T>> chunkList = new ArrayList<>();
+        int chunkSize = (content.size() + chunkCount -1) / chunkCount;
+        for (int i = 0; i < content.size(); i += chunkSize) {
+            int end = i + chunkSize;
+            if(end > content.size()) {
+                end = content.size();
+            }
+            chunkList.add(content.subList(i, end));
         }
         return chunkList;
     }
